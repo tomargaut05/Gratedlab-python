@@ -16,7 +16,7 @@ No AI tools were used.
 
 ## What I used them for
 
-- e.g. explaining argparse, debugging the date validation, generating test data
+-  explaining , debugging , generating idea 
 
 ## Which parts of the code were AI-generated or substantially AI-assisted
 
