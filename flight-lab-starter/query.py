@@ -30,7 +30,7 @@ def _is_valid_query(query: dict) -> bool:
         if k not in ALLOWED_KEYS:
             return False
 
-    # Validation par champ
+    
     if "flight_id" in query and (not isinstance(query["flight_id"], str) or isinstance(query["flight_id"], bool)):
         return False
     if "origin" in query and (not isinstance(query["origin"], str) or isinstance(query["origin"], bool)):
@@ -73,7 +73,7 @@ def run_query(db: list[dict], query: dict) -> dict:
 
     matches = list(db)
 
-    # Filtrage
+    
     if "flight_id" in query:
         matches = [f for f in matches if f["flight_id"] == query["flight_id"]]
     if "origin" in query:
@@ -87,15 +87,15 @@ def run_query(db: list[dict], query: dict) -> dict:
     if "price" in query:
         matches = [f for f in matches if f["price"] <= query["price"]]
     if "min_price" in query:
-        matches = [f for f in matches if f["price"] >= query["min_price"]]  # CORRIGÉ ICI (f["price"])
+        matches = [f for f in matches if f["price"] >= query["min_price"]]  
 
-    # Tri
+    
     if "sort_by" in query:
         key = query["sort_by"]
         reverse = query.get("order") == "desc"
         matches = sorted(matches, key=lambda x: x[key], reverse=reverse)
 
-    # Limite
+    
     if "limit" in query:
         matches = matches[:query["limit"]]
 

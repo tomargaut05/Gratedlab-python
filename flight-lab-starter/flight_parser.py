@@ -24,7 +24,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("-q", help="Run queries from JSON file.")
     parser.add_argument("-r", default=".", help="Folder for query response file.")
 
-    # Validation de l'utilisation des arguments
+    
     try:
         args = parser.parse_args(argv)
     except SystemExit as e:
@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     db: list[dict] = []
     logger = logging.getLogger("flight_parser")
 
-    # Traitement des sources
+    
     if args.j:
         if not os.path.isfile(args.j):
             sys.stderr.write("Error: JSON database file does not exist.\n")
@@ -90,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
         log_folder = os.path.dirname(args.o) or "."
         log_path = os.path.join(log_folder, "errors.log")
 
-        # Configuration propre du logger (avec cleanup garanti)
+        
         logger.setLevel(logging.INFO)
         handler = logging.FileHandler(log_path, mode="w", encoding="utf-8")
         handler.setFormatter(logging.Formatter(
@@ -112,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
             logger.removeHandler(handler)
             handler.close()
 
-    # Traitement des requêtes (-q)
+    
     if args.q:
         if not os.path.isfile(args.q):
             sys.stderr.write("Error: Query file does not exist.\n")

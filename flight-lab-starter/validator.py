@@ -2,10 +2,10 @@ import datetime
 import math
 import re
 
-# Expression régulière pour Flight ID : 2 à 8 caractères alphanumériques ASCII
+
 FLIGHT_ID_PATTERN = re.compile(r"^[A-Za-z0-9]{2,8}$")
 
-# Expression régulière pour le code Aéroport : exactement 3 lettres majuscules ASCII
+
 AIRPORT_CODE_PATTERN = re.compile(r"^[A-Z]{3}$")
 
 
@@ -36,49 +36,49 @@ def _parse_strict_datetime(dt_str: str) -> datetime.datetime | None:
 
 def validate_row(fields: list[str], airports: set[str]) -> str | None:
     """Check one CSV row according to checks 1 to 11."""
-    # Check 1: WRONG_FIELD_COUNT
+    
     if len(fields) != 6:
         return "WRONG_FIELD_COUNT"
 
     stripped_fields = [f.strip() for f in fields]
 
-    # Check 2: MISSING_FIELD
+    
     if any(f == "" for f in stripped_fields):
         return "MISSING_FIELD"
 
     flight_id, origin, destination, dep_str, arr_str, price_str = stripped_fields
 
-    # Check 3: INVALID_FLIGHT_ID
+    
     if not FLIGHT_ID_PATTERN.match(flight_id):
         return "INVALID_FLIGHT_ID"
 
-    # Check 4: INVALID_ORIGIN
+    
     if not AIRPORT_CODE_PATTERN.match(origin) or origin not in airports:
         return "INVALID_ORIGIN"
 
-    # Check 5: INVALID_DESTINATION
+    
     if not AIRPORT_CODE_PATTERN.match(destination) or destination not in airports:
         return "INVALID_DESTINATION"
 
-    # Check 6: SAME_ORIGIN_DESTINATION
+    
     if origin == destination:
         return "SAME_ORIGIN_DESTINATION"
 
-    # Check 7: INVALID_DEPARTURE
+    
     dep_dt = _parse_strict_datetime(dep_str)
     if dep_dt is None:
         return "INVALID_DEPARTURE"
 
-    # Check 8: INVALID_ARRIVAL
+    
     arr_dt = _parse_strict_datetime(arr_str)
     if arr_dt is None:
         return "INVALID_ARRIVAL"
 
-    # Check 9: ARRIVAL_NOT_AFTER_DEPARTURE
+    
     if arr_dt <= dep_dt:
         return "ARRIVAL_NOT_AFTER_DEPARTURE"
 
-    # Check 10: INVALID_PRICE
+    
     try:
         price = float(price_str)
         if math.isnan(price) or math.isinf(price):
@@ -86,7 +86,7 @@ def validate_row(fields: list[str], airports: set[str]) -> str | None:
     except ValueError:
         return "INVALID_PRICE"
 
-    # Check 11: NON_POSITIVE_PRICE
+    
     if price <= 0:
         return "NON_POSITIVE_PRICE"
 

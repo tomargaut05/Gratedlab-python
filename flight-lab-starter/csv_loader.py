@@ -20,22 +20,22 @@ def parse_files(paths: list[str], airports: set[str]) -> tuple[list[dict], list[
             for line in f:
                 line_num += 1
                 raw_line = line.strip()
-                # Sauter la ligne d'en-tête (ligne 1), les lignes vides et les commentaires
+                
                 if line_num == 1:
                     continue
                 if not raw_line or raw_line.startswith("#"):
                     continue
 
-                # Parser la ligne avec csv.reader sur une liste de 1 élément
+                
                 row_fields = list(csv.reader([line]))[0]
 
-                # Validation des règles 1 à 11
+                
                 error_code = validate_row(row_fields, airports)
                 if error_code is not None:
                     errors.append(f"{base_name}:{line_num}: {error_code} | {line.rstrip('\r\n')}")
                     continue
 
-                # Règle 12 : DUPLICATE_FLIGHT
+                
                 record = to_record(row_fields)
                 flight_key = (record["flight_id"], record["departure_datetime"])
                 if flight_key in seen_flights:
